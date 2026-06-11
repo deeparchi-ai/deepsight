@@ -1,0 +1,221 @@
+{
+  "version": "1.0",
+  "convention": "Anthropic Harness pattern — tasks as shared state across sessions",
+  "tasks": [
+    {
+      "id": "hermes-bootstrap",
+      "category": "infrastructure",
+      "title": "Hermes Session Bootstrap — 实现跨session状态传递",
+      "status": "completed",
+      "priority": 1,
+      "steps": [
+        {
+          "name": "创建 task_registry.json",
+          "status": "completed"
+        },
+        {
+          "name": "创建 progress.log",
+          "status": "completed"
+        },
+        {
+          "name": "创建 session-bootstrap skill",
+          "status": "completed"
+        },
+        {
+          "name": "更新 persona 自动加载",
+          "status": "completed"
+        },
+        {
+          "name": "端到端测试验证",
+          "status": "completed"
+        }
+      ],
+      "created": "2026-06-11T07:50:00+08:00",
+      "notes": "已完成：task_registry.json, progress.log, session-bootstrap skill, SOUL.md 自动加载"
+    },
+    {
+      "id": "deepsight-v2.4.0-upgrade",
+      "category": "infrastructure",
+      "title": "DeepSight v2.4.0 升级 — 广度扩展（框架 6→8 + 对抗模板 6→7）",
+      "status": "completed",
+      "priority": 1,
+      "steps": [
+        {
+          "name": "修复文件重复/编号错误",
+          "status": "completed"
+        },
+        {
+          "name": "新增组织设计框架（Galbraith Star + McKinsey 7S）",
+          "status": "completed"
+        },
+        {
+          "name": "新增平台/生态框架（Rochet & Tirole + Network Effects）",
+          "status": "completed"
+        },
+        {
+          "name": "新增地缘政治/供应链安全对抗模板",
+          "status": "completed"
+        },
+        {
+          "name": "版本号升级 v2.3.1 → v2.4.0 + 交叉引用更新",
+          "status": "completed"
+        }
+      ],
+      "created": "2026-06-11T06:16:00+08:00",
+      "last_session": "2026-06-11T06:16:00+08:00",
+      "notes": "广度优化完成，深度优化（敏感性分析、二阶效应、时间梯度投影）搁置。历史补录。"
+    },
+    {
+      "id": "deepsight-v2.5.0-ux",
+      "category": "infrastructure",
+      "title": "DeepSight v2.5.0 UX 重构 — 扁平步骤 + 轻量模式 + 模板拆分",
+      "status": "completed",
+      "priority": 1,
+      "steps": [
+        {
+          "name": "修复「六套」→「八套」文本 bug",
+          "status": "completed"
+        },
+        {
+          "name": "拆模板到 references/: constraint-chains.md + adversarial-templates.md + framework-catalog.md",
+          "status": "completed"
+        },
+        {
+          "name": "重写 SKILL.md: Phase 0/1/2/3 扁平编号 + 轻量模式 + 合并审查层",
+          "status": "completed"
+        }
+      ],
+      "created": "2026-06-11T08:10:00+08:00",
+      "notes": "SKILL.md 688→190行（28%）。新增轻量模式（2轮追问+1轮对抗）。步骤编号从 1/1b/2a/2b/2c/3/3b/3c 扁平化为 Phase 0/1/2/3。"
+    },
+    {
+      "id": "deepsight-diamond-copper",
+      "category": "research",
+      "title": "DeepSight 实战 — 金刚石/铜复合材料深度研究",
+      "status": "completed",
+      "priority": 2,
+      "steps": [
+        {
+          "name": "IMA 知识库资料搜集（32份）",
+          "status": "completed"
+        },
+        {
+          "name": "制备技术路线分析（6大路线对比）",
+          "status": "completed"
+        },
+        {
+          "name": "界面工程/涂层方案深度评估",
+          "status": "completed"
+        },
+        {
+          "name": "竞争格局 & 赛墨科技/NIMTE 评估",
+          "status": "completed"
+        },
+        {
+          "name": "v2.0 可视化报告生成（6张 SVG/PNG 图表）",
+          "status": "completed"
+        },
+        {
+          "name": "Word 文档修复 & 飞书交付",
+          "status": "completed"
+        }
+      ],
+      "created": "2026-06-02T09:53:00+08:00",
+      "last_session": "2026-06-02T11:33:00+08:00",
+      "notes": "首次 DeepSight 完整实战。产出：515KB Word 报告 + 6张专业图表。2026年为金刚石/铜规模化元年。历史补录。"
+    },
+    {
+      "id": "blm-jutong-strategy",
+      "category": "consulting",
+      "title": "聚通云 BLM 战略咨询报告",
+      "status": "not_started",
+      "priority": 2,
+      "steps": [
+        {
+          "name": "战略意图分析（BLM L1）",
+          "status": "not_started"
+        },
+        {
+          "name": "市场洞察（BLM L2）",
+          "status": "not_started"
+        },
+        {
+          "name": "创新焦点（BLM L3）",
+          "status": "not_started"
+        },
+        {
+          "name": "业务设计（BLM L2）",
+          "status": "not_started"
+        },
+        {
+          "name": "执行四通道设计",
+          "status": "not_started"
+        },
+        {
+          "name": "飞书文档交付",
+          "status": "not_started"
+        }
+      ],
+      "created": "2026-06-11T00:00:00+08:00"
+    },
+    {
+      "id": "deeparchi-whitepaper-cubesandbox",
+      "category": "content",
+      "title": "深度架构白皮书 — Agent 沙箱技术对比（Cube vs Anthropic）",
+      "status": "not_started",
+      "priority": 3,
+      "steps": [
+        {
+          "name": "Cube Sandbox 技术深度分析",
+          "status": "completed"
+        },
+        {
+          "name": "Anthropic Harness/Containment 分析",
+          "status": "completed"
+        },
+        {
+          "name": "Dynamic Workflow 场景映射",
+          "status": "completed"
+        },
+        {
+          "name": "白皮书初稿撰写",
+          "status": "not_started"
+        },
+        {
+          "name": "邝谧编辑 + 飞书发布",
+          "status": "not_started"
+        }
+      ],
+      "created": "2026-06-11T07:30:00+08:00",
+      "notes": "已积累全部素材：Cube Sandbox 技术架构、Anthropic Harness 两篇博客、Dynamic Workflow 场景分析"
+    },
+    {
+      "id": "bank-procurement-ongoing",
+      "category": "data_collection",
+      "title": "银行云平台/信创采购中标信息采集",
+      "status": "not_started",
+      "priority": 4,
+      "steps": [
+        {
+          "name": "初始化 bank_list.json（25家目标银行）",
+          "status": "not_started"
+        },
+        {
+          "name": "并行采集 batch 1",
+          "status": "not_started"
+        },
+        {
+          "name": "链接抽检验证（邝谧规则：3个随机抽检）",
+          "status": "not_started"
+        },
+        {
+          "name": "数据汇总入库",
+          "status": "not_started"
+        }
+      ],
+      "created": "2026-06-11T00:00:00+08:00",
+      "notes": "采集路线已确认：Bocha → bidcenter.com.cn 聚合提取。避免直接搜各省招标站"
+    }
+  ],
+  "last_updated": "2026-06-11T08:15:00+08:00"
+}
