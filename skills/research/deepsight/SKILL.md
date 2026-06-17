@@ -157,6 +157,12 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 配色：莫兰迪暖调（`#7BA3A8` / `#D4956A` / `#F5F0E6`），飞书 Mermaid `theme: neutral`。
 插入方式：`docs +update --command block_insert_after`，禁止 `overwrite`。
 
+> ⚠️ **Markdown 导入陷阱：** 从本地 .md 文件创建飞书文档时：
+> 1. **先剥离 YAML frontmatter** — `---` 包裹的元数据块不会自动跳过，会变成正文乱码
+> 2. **表格分隔符必须 `|---|---|`** — Feishu 不认 `|-|-|` 格式
+> 3. **v2 API 不支持 `--title`** — 标题写为 markdown 内容的 `# Title`
+> 4. **文件跨目录用 stdin** — `--content @file` 限相对路径，不在当前目录时用 `cat file | lark-cli docs +create ... --content -`
+
 ### 3.3 写作规范
 
 - 每节 So What callout（`emoji="🎯"`）："本节对决策者的意义是___"
@@ -175,6 +181,12 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 翻盘条件格式："如果 [反例 X] 成立，则此建议无效。"
 
 ---
+
+## 辅助方法
+
+### 结构化脑暴
+
+当需要系统性地生成创业/产品/变现路径创意时，参考 `references/structured-brainstorming-methodology.md`。该方法论基于邝谧主义 23 脑洞实战总结，覆盖分层挖掘、统一输出格式、协同分析、筛选归档全流程。
 
 ## 常见陷阱
 
