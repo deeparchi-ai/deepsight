@@ -205,3 +205,7 @@ OpenRouter:   余额 $0, Claude 需充值
 hermes config set auxiliary.vision.model moonshot-v1-128k-vision-preview
 ```
 但 vision_analyze 调用仍可能缓存旧模型，需 gateway 重启生效。临时方案：直接用 Python+curl 调 Kimi vision API（base64 图片需写入文件后 `@file` 传参，命令行直接传会 Argument list too long）。
+
+---
+
+> ⚠️ **本文件的型号列表是易过期快照**（免费层可用性以小时计变化）。选型应按**能力声明**而非写死型号——见 [`council-capability-spec.md`](council-capability-spec.md)（厂商无关的审计席位要求 + 运行时选型流程）。严谨性规则见 [`council-protocol.md`](council-protocol.md)。
