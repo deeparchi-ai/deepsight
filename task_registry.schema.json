@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/deeparchi-ai/deepsight/task_registry.schema.json",
+  "title": "DeepSight task_registry",
+  "description": "Cross-session shared-state registry (Anthropic Harness pattern). Validate task_registry.json against this schema before committing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "tasks", "last_updated"],
+  "properties": {
+    "version": { "type": "string", "description": "Registry schema/format version (distinct from the DeepSight methodology version)." },
+    "convention": { "type": "string" },
+    "last_updated": { "type": "string", "format": "date-time" },
+    "tasks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/task" }
+    }
+  },
+  "$defs": {
+    "status": {
+      "type": "string",
+      "enum": ["not_started", "in_progress", "completed"]
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "status"],
+      "properties": {
+        "name": { "type": "string" },
+        "status": { "$ref": "#/$defs/status" }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "status", "steps"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "category": {
+          "type": "string",
+          "description": "Free-form; common values: infrastructure, research, consulting, content, data_collection."
+        },
+        "title": { "type": "string" },
+        "status": { "$ref": "#/$defs/status" },
+        "priority": { "type": "integer", "minimum": 1 },
+        "steps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/step" }
+        },
+        "created": { "type": "string", "format": "date-time" },
+        "last_session": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}
