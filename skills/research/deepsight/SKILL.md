@@ -1,16 +1,17 @@
 ---
 name: deepsight
-description: DeepSight 深度推理研究法 v2.5 — 8框架 + 7对抗模板 + 多厂商Council交叉验证。覆盖投资/战略/技术/市场/创业/行业/组织/平台全领域深度分析。支持轻量模式（2轮追问+1轮对抗）和深度模式（完整四步+Council审计）。
-version: 2.5.0
+description: DeepSight 深度推理研究法 v2.7 — 8框架 + 7对抗模板 + 多厂商Council交叉验证 + Firecrawl MCP搜索引擎（Web+学术）+ 战略决策强制审查。覆盖投资/战略/技术/市场/创业/行业/组织/平台全领域深度分析。支持轻量模式（2轮追问+1轮对抗）和深度模式（完整四步+Council审计）。
+version: 2.7.1
 metadata:
   architecture: multi-provider-adversarial
   requires_search: conditional
   adversarial_review: mandatory
   evidence_tiers: enabled
   council_cross_provider: enabled
+  council_hardening: P1-closed-loop + P2-measurable-anti-homogeneity + referee-independent
 ---
 
-# DeepSight v2.5
+# DeepSight v2.7.1
 
 > **触发条件：** 深度分析、跨领域推理、产业研究、技术路线对比、战略判断、物理/工程可行性评估等——需要推理引擎而非搜索引擎的场景。
 
@@ -19,7 +20,7 @@ metadata:
 ## 前置条件
 
 1. 确认本技能适用（原理深度高、跨领域、需要因果推理）
-2. 搜索基础设施：Bocha + SearXNG（搜不到不影响主流程）
+2. 搜索基础设施：**Firecrawl MCP（`firecrawl_search` / `firecrawl_scrape`，优先）** → Bocha → SearXNG（搜不到不影响主流程）
 3. 不适用场景：简单事实查询、实时新闻、纯代码编写、纯数据统计、用户明确要求"搜索"
 
 ---
@@ -28,7 +29,7 @@ metadata:
 
 ```
 Phase 0: 路由 ─── 轻量模式 or 深度模式？ → 选择框架（8选1）
-Phase 1: 深度研究 ─ 四步递进（每步含：约束追问 + 搜索 + 对抗审查 + 冲突检测 + 证据标注）
+Phase 1: 深度研究 ─ 四步递进（每步含：约束追问 + 搜索 + 对抗审查 + 冲突检测闭环 + 证据标注） + 深度增强（仅深度模式）
 Phase 2: 审查审计 ─ 可选：多厂商 Council 交叉验证（单模型对抗审查的升级版）
 Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图 + 决策刹车）
 ```
@@ -36,6 +37,24 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 ---
 
 ## Phase 0: 路由
+
+### 0.0 战略决策强制审查
+
+> **触发条件：** 用户提出重大战略转向——公司转型、品牌重塑、新业务线启动、商业模式切换。**必须执行反方论证后再给执行建议。**
+
+这不是可选的。发现以下信号词立即触发：
+- "转型" / "重启" / "pivot"
+- "变成XX" / "做成中国版XX"
+- "把XX和XX合并/拆分"
+- 用户要求"出执行计划"但之前没有做过反方论证
+
+流程：
+1. 置信度校准（每条核心结论打分 1-10）
+2. Council 五角色攻击（模板 6）
+3. 反面证据清单 + 修正后建议
+4. 用户确认修正方向后才出执行计划
+
+> **教训：** 2026-06-19 诺致科技转型 Polsia 方案，直接出执行计划被用户打断要求「先做反方挑战」。战略决策的反方论证优先级高于执行计划。
 
 ### 0.1 模式选择
 
@@ -78,7 +97,7 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 
 ## Phase 1: 深度研究
 
-按选定框架的四步递进执行。**每步独立执行以下五个子步骤，不跨步复用：**
+按选定框架的四步递进执行。**每步独立执行以下子步骤，不跨步复用：**
 
 ### 1.1 约束追问
 
@@ -99,7 +118,35 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 
 触发条件：结论涉及近1-2年事件/数据、可公开查询的定量数据、或对抗审查中出现需外部验证的矛盾。
 
-搜索策略：Bocha（中文）→ SearXNG（多引擎）→ DDG → 浏览器直访垂直媒体（商业类必须穷尽）。
+**搜索策略（按优先级）：**
+
+| 优先级 | 工具 | 适用场景 |
+|--------|------|---------|
+| **1** | `firecrawl_search` | 通用 Web 搜索，返回标题+URL+摘要，可选附带 scrape 抓取全部结果页 |
+| **2** | `firecrawl_scrape` | 抓取已知 URL 的完整内容（Markdown），替代 `web_extract`——处理 JS 渲染、反爬 |
+| **3** | **OpenAlex API**（免费） | 学术论文搜索（默认首选），2.5亿+论文，返回引用数/期刊/年份 |
+| **4** | **Google Scholar**（`firecrawl_scrape`） | 学术精确搜索（1 credit/次），用于 OpenAlex 精度不够时 |
+| **6** | `firecrawl_crawl` | 深度研究需要穷尽某个站点时（如官方文档、竞争对手全站分析） |
+| **7** | `firecrawl_map` | 需要发现某站点所有 URL 时（如文档站结构探测） |
+| **8** | Bocha（中文）→ SearXNG（多引擎）→ DDG | Fallback，当 Firecrawl 不适用时（如中文垂直搜索、实时新闻） |
+| **9** | 浏览器直访垂直媒体 | 商业类必须穷尽，不可过早接受"搜不到" |
+| **—** | `browser_vision`（特殊） | 微信视频号/公众号等封闭生态——详见 `references/chinese-walled-garden-extraction.md` |
+
+**学术搜索策略：**
+- **首选 OpenAlex（免费）：** `curl "https://api.openalex.org/works?filter=title_and_abstract.search:关键词,publication_year:2024&sort=cited_by_count:desc&per_page=5"` — 免费、无需 Key、返回标题/引用数/期刊
+- **补充 arXiv：** 已知论文在 arXiv 时直接用 arxiv 技能搜索（精确匹配、速度快）
+- **Google Scholar 精确搜索（付费）：** `firecrawl_scrape(url="https://scholar.google.com/scholar?q=<URL编码关键词>&num=5&as_ylo=<年份>")` — 1 credit，搜索排名和引用数最准确
+- **技术路线/TRL 分析强制走学术搜索**——同行评议论文的证据等级高于博客/新闻
+- OpenAlex 搜不到或精度不够时，升级到 Google Scholar
+
+**Firecrawl 搜索最佳实践：**
+- 单次 `firecrawl_search(limit=5)` 返回 5 条结果，消耗 2 credits。搜索后立即调用 `firecrawl_search_feedback` 退回 1 credit（净成本 1 credit）。
+- 需要页面全文时，对搜索结果中的 URL 调用 `firecrawl_scrape(url, formats=["markdown"])`，1 credit/页。
+- 多页深度研究用 `firecrawl_crawl(url, maxDiscoveryDepth=3, limit=20)` 自动爬取关联页面。
+- 反馈窗口仅 ~2 分钟，搜索后立即 feedback。
+- **Google Scholar 搜索模板：** `firecrawl_scrape(url="https://scholar.google.com/scholar?q=<URL编码关键词>&num=5&as_ylo=<年份>")`。加 `&as_ylo=2024` 限定近年论文。
+
+**降级策略：** Firecrawl 不可用（API key 失效/配额耗尽）→ 自动降级到 Bocha → SearXNG → 浏览器。
 
 ### 1.3 对抗审查
 
@@ -134,7 +181,7 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 
 ### 1.6 深度增强（仅深度模式）
 
-> 广度（8 框架）解决"覆盖面"，深度解决"看多透"。把 v2.4 搁置的**深度三件套**补回——深度模式在证据分级后追加：
+> 广度（8 框架）解决"覆盖面"，深度解决"看多透"。深度模式在证据分级后追加：
 
 1. **敏感性分析：** 列出结论最依赖的 2–3 个关键假设，逐一问"若此假设反转，结论是否成立？"——不稳健的假设转为翻盘条件。
 2. **二阶效应：** 这个结论一旦成立，会**引发**什么下游后果（竞争对手反应 / 监管 / 用户行为）？"一阶对、二阶反噬"的情形必须显式列出。
@@ -147,6 +194,8 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 ## Phase 2: 审查审计（可选）
 
 > 定位：Phase 1 单模型自我审查的升级版——用不同厂商模型进行外部交叉验证。
+>
+> Council 的目的不是"达成共识"，是**暴露盲区**。"读起来很一致"不是质量信号——**高一致 + 低多样性 = 共享盲区**。严谨性协议（多样性/共识/裁决独立，**以此为准**）：`references/council-protocol.md`；厂商基础设施配置：`references/council-model-setup.md`；能力声明（为什么不能写死型号）：`references/council-capability-spec.md`。
 
 ### 触发条件
 
@@ -170,8 +219,6 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 
 输出：`审计报告`（`council_provenance` + 多样性分 D + 首轮一致度 + 共识矩阵 + 证据级修正表 + 审计强度声明）。
 
-严谨性协议（多样性/共识/裁决独立，**以此为准**）：`references/council-protocol.md`；厂商基础设施配置：`references/council-model-setup.md`。
-
 ---
 
 ## Phase 3: 报告交付（可选 · 交付层）
@@ -179,6 +226,8 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 > **可移植性边界：** Phase 3 是**可替换的交付层**，不是方法论本体。DeepSight 的核心产出是 **分析 + 证据分级结论 + 审计报告**（Phase 1–2），与渲染解耦。下面的飞书 `consulting-report` 模板、莫兰迪配色、`~/.hermes` 路径等都是**作者环境的一种实现**；换 Markdown / PDF / 其它平台只需替换本层，核心不变。
 
 使用 `consulting-report` 技能模板（10章 + chart-spec + So What callout）。
+
+> 🚀 **飞书交付快速通道：** 报告写完 .md → Vault 存档 → stdin 管道导入飞书文档 → 链接发群。完整流程见 `references/feishu-delivery-pipeline.md`。
 
 ### 3.1 四步产出 → 报告章节映射
 
@@ -225,6 +274,18 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 
 当需要系统性地生成创业/产品/变现路径创意时，参考 `references/structured-brainstorming-methodology.md`。该方法论基于邝谧主义 23 脑洞实战总结，覆盖分层挖掘、统一输出格式、协同分析、筛选归档全流程。
 
+### 全球案例研究 → 中国复制模式
+
+当用户分享海外案例并提出「复制到中国」时，走以下流程（参考 Polsia 实战）：
+
+1. **内容提取**：海外链接 → firecrawl_scrape 或 browser_vision（微信视频号等封闭生态，参考 `references/chinese-walled-garden-extraction.md`）
+2. **深挖**：firecrawl_search → firecrawl_scrape（深度访谈/报道） → OpenAlex（学术背景）
+3. **分析报告**：存 Obsidian Vault，按 DeepSight 证据等级标注
+4. **反方论证**：先做 Phase 0.0 战略决策强制审查，再出计划
+5. **执行计划**：writing-plans 格式，含本周行动清单
+
+**案例：** Polsia 深度分析 → 诺致科技中国版计划，详见 Vault `03-案例研究/Polsia-OPC-AI原生一人公司深度分析.md`。
+
 ## 常见陷阱
 
 1. **跳过对抗审查。** 推理链特别自洽时最容易跳过——恰好是最需要的时候。自洽≠正确。
@@ -237,3 +298,7 @@ Phase 3: 报告交付 ─ 飞书文档（consulting-report 10章 + Mermaid配图
 8. **[A] 授予标准过松。** 模型倾向将"当事人确认"标为 [A]，已被 Council 审计多次纠正。外部独立来源才可标 [A]。
 9. **delegate_task 子 Agent 仍是主模型。** 修改 delegation 配置后需重启 gateway 验证。
 10. **轻量模式误用。** 如果分析过程中发现 ≥2 个需要深挖的子问题 → 升级为深度模式。
+11. **术语/缩写歧义。** 用户使用的缩写（如 OPC、SLA、API）在不同领域有完全不同含义。典型教训：OPC 在 DeepArchi 语境中首次出现时被误读为"Open Platform Coordination"，实际为"One Person Company（一人公司）"——导致整版报告作废重写。**对策：** 遇到领域缩写时，若存在 ≥2 个常见释义，先搜索确认用户语境下的正确含义，而非根据上下文自行推断。一次快速 web_search("OPC 一人公司") 即可避免数小时返工。
+12. **Firecrawl 搜索后忘记 feedback。** 每次 `firecrawl_search` 消耗 2 credits，feedback 退回 1 credit。窗口仅 ~2 分钟，错过不可补。**对策：** 搜索后立即调用 `firecrawl_search_feedback`——习惯性操作，不计入思考时间。
+13. **Council 降级被静默。** 多样性不足（D<3）时，只跑审计但不改证据级→读者看不见这次 Council 其实很弱。**对策：** 降级必须落到证据级 + 报告显式标注（见 §2 诚实降级阶梯）。
+14. **冲突未闭环。** 检出矛盾后"选一条感觉对的"就往下走，未解决的冲突变成隐式风险。**对策：** 1.4 闭环判据——每个冲突必须收口到定向验证/新一轮追问/风险留存三者之一。
